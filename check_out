@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<body>
+<?php
+//page 6
+// Connect to the database
+$servername = "localhost";
+$username = "hoaisn2";
+$password = "1234";
+$dbname = "BAITAP";
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Update data in the table
+$sql = "UPDATE my_contacts SET full_names='Updated Contact' WHERE id=1";
+
+if ($conn->query($sql) === TRUE) {
+    echo "Record updated successfully";
+} else {
+    echo "Error: " . $sql . "<br>" . $conn->error;
+}
+// Delete data from the table
+$sql = "DELETE FROM my_contacts WHERE id=1";
+
+if ($conn->query($sql) === TRUE) {
+    echo "Record deleted successfully";
+} else {
+    echo "Error: " . $sql . "<br>" . $conn->error;
+}
+// Display data from the table
+$sql = "SELECT * FROM my_contacts";
+$result = $conn->query($sql);
+
+if ($result->num_rows > 0) {
+    while($row = $result->fetch_assoc()) {
+        echo "ID: " . $row["id"]. " - Name: " . $row["full_names"]. " - Gender: " . $row["gender"]. " - Contact No: " . $row["contact_no"]. " - Email: " . $row["email"]. " - City: " . $row["city"]. " - Country: " . $row["country"]. "<br>";
+    }
+} else {
+    echo "0 results";
+}
+$conn->close();
+// Page 14
+// Database connection settings
+$dsn = 'mysql:host=localhost;dbname=BAITAP';
+$username = 'hoaik58sn2';
+$password = '1234';
+
+// Create a new PDO instance
+$pdo = new PDO($dsn, $username, $password);
+
+// Insert data into the table
+$stmt = $pdo->prepare('INSERT INTO my_contacts (full_names, gender, contact_no, email, city, country) VALUES (:full_names, :gender, :contact_no, :email, :city, :country)');
+$stmt->bindParam(':full_names', $full_names);
+$stmt->bindParam(':gender', $gender);
+$stmt->bindParam(':contact_no', $contact_no);
+$stmt->bindParam(':email', $email);
+$stmt->bindParam(':city', $city);
+$stmt->bindParam(':country', $country);
+
+// Example data to insert
+$full_names = 'Poseidon';
+$gender = 'Male';
+$contact_no = '555';
+$email = 'poseidon@olympus.mt.co';
+$city = 'Athens';
+$country = 'Greece';
+
+$stmt->execute();
+// Create a new PDO instance
+$pdo = new PDO($dsn, $username, $password);
+
+// Update data in the table
+$stmt = $pdo->prepare('UPDATE my_contacts SET full_names = :full_names, gender = :gender, contact_no = :contact_no, email = :email, city = :city, country = :country WHERE id = :id');
+$stmt->bindParam(':full_names', $full_names);
+$stmt->bindParam(':gender', $gender);
+$stmt->bindParam(':contact_no', $contact_no);
+$stmt->bindParam(':email', $email);
+$stmt->bindParam(':city', $city);
+$stmt->bindParam(':country', $country);
+$stmt->bindParam(':id', $id);
+
+// Example data to update
+$full_names = 'Poseidon';
+$gender = 'Male';
+$contact_no = '555';
+$email = 'poseidon@olympus.mt.co';
+$city = 'Athens';
+$country = 'Greece';
+$id = 1; // Update the row with id = 1
+
+$stmt->execute();
+// Delete data from the table
+$stmt = $pdo->prepare('DELETE FROM my_contacts WHERE id = :id');
+$stmt->bindParam(':id', $id);
+
+// Example data to delete
+$id = 1; // Delete the row with id = 1
+
+$stmt->execute();
+// Close the PDO connection
+$pdo = null;
+
+// Retrieve data from the table
+$stmt = $pdo->prepare('SELECT * FROM my_contacts');
+$stmt->execute();
+
+// Fetch the data
+$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Print the data
+foreach ($result as $row) {
+    echo $row['full_names'] . ' - ' . $row['gender'] . ' - ' . $row['contact_no'] . '<br>';
+}
+?>
